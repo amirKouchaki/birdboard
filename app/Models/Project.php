@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use phpDocumentor\Reflection\Types\True_;
 
 class Project extends Model
 {
@@ -23,10 +22,11 @@ class Project extends Model
         return $this->tasks()->create(compact('body'));
     }
 
-    public function recordActivity($type){
-        Activity::factory()->create([
-            'project_id' => $this->id,
-            'description' => $type
+    public function recordActivity($description)
+    {
+        $this->activity()->create([
+            'description' => $description,
+            'project_id' => $this->id
         ]);
     }
 
@@ -41,8 +41,9 @@ class Project extends Model
         return $this->hasMany(Task::class);
     }
 
-    public function activity(){
-        return $this->hasMany(Activity::class);
+    public function activity()
+    {
+        return $this->hasMany(Activity::class)->latest();
     }
 
 }

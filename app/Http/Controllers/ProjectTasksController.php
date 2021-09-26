@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Project;
 use App\Models\Task;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
 class ProjectTasksController extends Controller
@@ -17,7 +16,6 @@ class ProjectTasksController extends Controller
         $attributes = \request()->validate([
             'body' => 'required'
         ]);
-
         $project->addTask($attributes['body']);
 
         return redirect($project->path());
@@ -26,9 +24,12 @@ class ProjectTasksController extends Controller
 
     public function update(Project $project,Task $task){
         Gate::authorize('is_task_owner',$task);
-        $task->update(['body' => \request('body')]);
-        if(\request()->has('completed'))
-            $task->complete();
+
+        $task->update(\request()->validate(['body' => 'required']));
+        //TODO calling a method on string
+        $method = \request('completed')?'complete':'incomplete';
+        $task->$method();
+
         return redirect($project->path());
     }
 

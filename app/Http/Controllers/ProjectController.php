@@ -5,9 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-use Symfony\Component\HttpFoundation\Response;
 
 class ProjectController extends Controller
 {
@@ -39,7 +37,9 @@ class ProjectController extends Controller
     {
         Gate::authorize('is_project_owner',$project);
 
-        return view('projects.show', compact("project"));
+        return view('projects.show', [
+            'project' =>$project->load(['tasks','activity'])
+        ]);
     }
 
     public function update(Project $project){

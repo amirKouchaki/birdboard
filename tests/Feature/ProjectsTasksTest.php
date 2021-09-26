@@ -57,14 +57,33 @@ class ProjectsTasksTest extends TestCase
     /** @test */
     public function a_task_can_be_updated()
     {
-        $this->signIn();
-        $project = app(ProjectFactory::class)
-            ->withTasks()
-            ->ownedBy(auth()->user())
-            ->create();
-        $this->patch($project->tasks->first()->path(),$attributes = [
+        $project = app(ProjectFactory::class)->withTasks()->create();
+        $this->actingAs($project->owner)->patch($project->tasks->first()->path(),$attributes = [
+            'body' => 'this is the updated Task'
+        ])->assertRedirect($project->path());
+        $this->assertDatabaseHas('tasks', $attributes);
+
+    }
+
+    /** @test */
+    public function a_task_can_be_completed()
+    {
+        $project = app(ProjectFactory::class)->withTasks()->create();
+        $this->actingAs($project->owner)->patch($project->tasks->first()->path(),$attributes = [
             'body' => 'this is the updated Task',
             'completed' => true
+        ])->assertRedirect($project->path());
+        $this->assertDatabaseHas('tasks', $attributes);
+
+    }
+
+    /** @test */
+    public function a_task_can_be_marked_as_incomplete()
+    {
+        $project = app(ProjectFactory::class)->withTasks()->create();
+        $this->actingAs($project->owner)->patch($project->tasks->first()->path(),$attributes = [
+            'body' => 'this is the updated Task',
+            'completed' => false
         ])->assertRedirect($project->path());
         $this->assertDatabaseHas('tasks', $attributes);
 

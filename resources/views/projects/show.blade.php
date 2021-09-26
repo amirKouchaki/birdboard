@@ -56,13 +56,25 @@
         </div>
         <div class="lg:w-1/4 ml-3">
 
-            <x-card>
+            <x-card class="mb-5">
                 <div class=" text-md ">
                     <h3 class="border-l-4 border-blue-400 text-xl mb-6 h-14 font-bold -ml-6 pl-5 text-blue-500">
                         {{$project->title}}
                     </h3>
                     <div class="text-gray-600">{{$project->description}}</div>
                 </div>
+            </x-card>
+            <x-card>
+                <ul>
+                @forelse($project->activity as $activity)
+                    <li class="list-none text-sm font-bold {{!$loop->last ?'mb-1':''}}">
+                        @include('projects.activity.'.$activity->description)
+                        <span class="text-gray-400">{{$activity->created_at->diffForHumans(null,true)}}</span>
+                    </li>
+                @empty
+                    <li class="list-none">there are no activities yet!</li>
+                @endforelse
+                </ul>
             </x-card>
         </div>
     </div>

@@ -3,13 +3,11 @@
 namespace Tests\Feature;
 
 use App\Models\Project;
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\Setup\ProjectFactory;
 use Tests\TestCase;
-use Symfony\Component\HttpFoundation\Response;
-use function Symfony\Component\Translation\t;
+
 
 class ManageProjectTest extends TestCase
 {

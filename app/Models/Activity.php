@@ -9,6 +9,10 @@ class Activity extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'changes' => 'array'
+    ];
+
     public function subject(){
         return $this->morphTo();
     }

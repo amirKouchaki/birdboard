@@ -17,6 +17,7 @@ class CreateActivitiesTable extends Migration
             $table->id();
             $table->foreignId('project_id')->references('id')->on('projects')->cascadeOnDelete();
             $table->nullableMorphs('subject');
+            $table->json('changes')->nullable();
             $table->string('description');
             $table->timestamps();
         });

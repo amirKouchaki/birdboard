@@ -36,10 +36,8 @@ class ProjectController extends Controller
     public function show(Project $project)
     {
         Gate::authorize('is_project_owner',$project);
-
-        return view('projects.show', [
-            'project' =>$project->load(['tasks','activity'])
-        ]);
+        $project = $project->load(['tasks','activity']);
+        return view('projects.show',compact('project'));
     }
 
     public function update(Project $project){

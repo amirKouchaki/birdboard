@@ -4,11 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use phpDocumentor\Reflection\DocBlock\Tags\TagWithType;
 
 class Task extends Model
 {
     use HasFactory;
-
     protected $touches = ['project'];
 
     protected $casts = [

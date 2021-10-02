@@ -52,6 +52,19 @@ class ProjectController extends Controller
         Gate::authorize('is_project_owner',$project);
         return view('projects.edit',compact('project'));
     }
+
+    /**
+     * @throws \Throwable
+     */
+    public function destroy(Project $project){
+        Gate::authorize('is_project_owner',$project);
+        $project->deleteOrFail();
+        return redirect()->route('projects.index');
+    }
+
+
+
+
     protected function validateRequest(Project $project = null){
         $project = $project ?? new Project();
         return request()->validate([
@@ -60,4 +73,5 @@ class ProjectController extends Controller
             'notes' => ['nullable']
         ]);
     }
+
 }

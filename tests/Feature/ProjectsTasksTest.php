@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Task;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\Project;
 use phpDocumentor\Reflection\DocBlock\Tags\Author;
@@ -11,7 +12,7 @@ use Tests\TestCase;
 
 class ProjectsTasksTest extends TestCase
 {
-    use RefreshDatabase;
+    use LazilyRefreshDatabase;
 
     /** @test */
     public function guests_cannot_create_a_task()

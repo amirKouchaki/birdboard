@@ -42,7 +42,7 @@ class AppServiceProvider extends ServiceProvider
         );
 
         Model::unguard(true);
-        Project::observe(ProjectObserver::class);
-        Task::observe(ProjectTaskObserver::class);
+//        Project::observe(ProjectObserver::class);
+//        Task::observe(ProjectTaskObserver::class);
     }
 }

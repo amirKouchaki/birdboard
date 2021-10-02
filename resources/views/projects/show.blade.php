@@ -36,6 +36,7 @@
                         <input class="border-0 rounded w-full text-sm" type="text" placeholder="Add A New Task"
                                name="body" value="{{old('body')}}">
                     </form>
+
                 </x-card>
             </div>
             <div>
@@ -46,7 +47,7 @@
                     <textarea name="notes" id="" rows="10" class="w-full px-4 py-2 rounded"
                               placeholder="Anything special you want to make a note of?"
                     >{{$project->notes}}</textarea>
-                    <button type="submit" class="button">save notes</button>
+                    <button  type="submit" class="button mt-3">save notes</button>
                 </form>
                 @forelse($errors->all() as $error)
                     <div class="my-3 text-xs text-red-500">{{$error}}</div>

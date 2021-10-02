@@ -21,7 +21,7 @@ Route::get('/', function () {
 });
 
 Route::middleware('auth')->group(function (){
-    Route::resource('projects',ProjectController::class)->only(['index','create','store','show','update','edit']);
+    Route::resource('projects',ProjectController::class);
     Route::group([
         'prefix' => 'projects/{project}/tasks',
         'as' => 'tasks.'

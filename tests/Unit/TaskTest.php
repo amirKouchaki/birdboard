@@ -4,12 +4,13 @@ namespace Tests\Unit;
 
 use App\Models\Project;
 use App\Models\Task;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class TaskTest extends TestCase
 {
-    use RefreshDatabase;
+    use LazilyRefreshDatabase;
 
     /** @test */
     public function it_belongs_to_a_project(){

@@ -93,10 +93,11 @@ class ProjectsTasksTest extends TestCase
     /** @test */
     public function only_the_owner_can_update_the_task()
     {
-        $this->signIn();
-        $project = app(ProjectFactory::class)
-            ->withTasks()->create();
-        $this->patch($project->tasks[0]->path())->assertForbidden();
+
+        $project =  app(ProjectFactory::class)->withTasks()->create();
+        $project_not_owned_by_you = app(ProjectFactory::class)->withTasks()->create();
+
+        $this->actingAs($project->owner)->patch(route('tasks.update',[$project,$project_not_owned_by_you->tasks->first()]))->assertForbidden();
 
     }
 

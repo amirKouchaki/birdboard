@@ -33,12 +33,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::define(
             'is_project_owner',
             fn(User $user,Project $project)
-                =>$user->is($project->owner)
-        );
-        Gate::define(
-            'is_task_owner',
-            fn(User $user,Task $task)
-                 =>$user->is($task->project->owner)
+                =>$user->is($project->owner) ||$project->members->contains($user)
         );
 
         Model::unguard(true);

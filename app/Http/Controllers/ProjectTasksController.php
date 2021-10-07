@@ -23,7 +23,7 @@ class ProjectTasksController extends Controller
 
 
     public function update(Project $project,Task $task){
-        Gate::authorize('is_task_owner',$task);
+        Gate::authorize('is_project_owner',$task->project);
 
         $task->update(\request()->validate(['body' => 'required']));
         //TODO calling a method on string

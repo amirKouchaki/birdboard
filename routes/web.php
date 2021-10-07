@@ -5,6 +5,7 @@ use App\Http\Controllers\ProjectTasksController;
 use Illuminate\Support\Facades\Route;
 
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -26,8 +27,8 @@ Route::middleware('auth')->group(function (){
         'prefix' => 'projects/{project}/tasks',
         'as' => 'tasks.'
     ],function (){
-        Route::post('/',[ProjectTasksController::class,'store']);
-        Route::patch('/{task}',[ProjectTasksController::class,'update']);
+        Route::post('/',[ProjectTasksController::class,'store'])->name('store');
+        Route::patch('/{task}',[ProjectTasksController::class,'update'])->name('update');
     });
     Route::view('/dashboard','dashboard')->name('dashboard');
 });

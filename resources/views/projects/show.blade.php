@@ -4,8 +4,16 @@
             <div class="flex items-center">
                 <a href="{{route('projects.index')}}" class="mr-2 align-text-bottom">my projects</a>/
                 <div class="font-semibold text-md text-gray-500 leading-tight ml-2">{{ $project->title }}</div>
+
             </div>
-            <a href="{{$project->path().'/edit'}}" class="ml-auto py-2 px-4 bg-blue-400 rounded-full text-white">edit your project</a>
+            <span class="flex ml-auto">
+                @foreach($project->members as $member)
+                    <img class="rounded-full w-10 mr-4" src="{{pravatar_url($member->id)}}" alt="{{$member->name}}'s profile picture">
+                @endforeach
+                <img class="rounded-full w-10 mr-4" src="{{pravatar_url($project->owner_id)}}" alt="owner's profile picture">
+                <a href="{{$project->path().'/edit'}}" class=" py-2 px-4 bg-blue-400 rounded-full text-white ml-4">edit your project</a>
+            </span>
+
         </div>
     </x-slot>
 

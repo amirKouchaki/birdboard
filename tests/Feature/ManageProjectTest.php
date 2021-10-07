@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Project;
+use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -48,6 +49,8 @@ class ManageProjectTest extends TestCase
         $this->assertDatabaseHas('projects',$attributes);
         $this->get($project->path().'/edit')->assertOk();
     }
+
+
 
     /** @test */
         public function only_an_authenticated_user_can_update_a_projects_general_notes_only(){
@@ -116,11 +119,19 @@ class ManageProjectTest extends TestCase
 
 
     /** @test */
-    public function unauthenticated_users_cannot_update_a_project()
+    public function an_authenticated_users_cannot_update_others_project()
     {
         $this->signIn();
         $project = Project::factory()->create();
         $this->patch($project->path())->assertForbidden();
 
+    }
+
+    /** @test */
+    public function a_user_can_see_all_the_projects_they_have_been_invited_to(){
+
+        tap($project = app(ProjectFactory::class)->create())->invite($this->signIn());
+
+        $this->get(route('projects.index'))->assertSee($project->title);
     }
 }

@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 
 
+use App\Models\User;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Validation\Rule;
 
 class ProjectController extends Controller
 {
@@ -35,13 +37,13 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        Gate::authorize('is_project_owner',$project);
+        Gate::authorize('is_associated_with_project',$project);
         $project = $project->load(['tasks','activity']);
         return view('projects.show',compact('project'));
     }
 
     public function update(Project $project){
-        Gate::authorize('is_project_owner',$project);
+        Gate::authorize('is_associated_with_project',$project);
         $attributes = $this->validateRequest($project);
 
         $project->update($attributes);
@@ -49,7 +51,7 @@ class ProjectController extends Controller
         return redirect($project->path());
     }
     public function edit(Project $project){
-        Gate::authorize('is_project_owner',$project);
+        Gate::authorize('is_associated_with_project',$project);
         return view('projects.edit',compact('project'));
     }
 
@@ -57,10 +59,12 @@ class ProjectController extends Controller
      * @throws \Throwable
      */
     public function destroy(Project $project){
-        Gate::authorize('is_project_owner',$project);
+        Gate::authorize('is_associated_with_project',$project);
         $project->deleteOrFail();
         return redirect()->route('projects.index');
     }
+
+
 
 
 

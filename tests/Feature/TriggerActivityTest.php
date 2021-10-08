@@ -8,7 +8,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-use Tests\Setup\ProjectFactory;
+use Facades\Tests\Setup\ProjectFactory;
 
 class TriggerActivityTest extends TestCase
 {
@@ -17,7 +17,7 @@ class TriggerActivityTest extends TestCase
     /** @test */
     public function creating_a_project()
     {
-        $project = app(ProjectFactory::class)->create();
+        $project = ProjectFactory::create();
 
         $this->assertCount(1, $project->activity);
 
@@ -33,7 +33,7 @@ class TriggerActivityTest extends TestCase
     {
         // $this->withOutExceptionHandling();
 
-        $project = app(ProjectFactory::class)->create();
+        $project = ProjectFactory::create();
 
         $originalTitle = $project->title;
 
@@ -57,7 +57,7 @@ class TriggerActivityTest extends TestCase
     /** @test */
     public function creating_a_task()
     {
-        $project = app(ProjectFactory::class)->create();
+        $project = ProjectFactory::create();
 
         $project->addTask('Some task');
 
@@ -75,7 +75,7 @@ class TriggerActivityTest extends TestCase
     /** @test */
     public function completing_a_task()
     {
-        $project = app(ProjectFactory::class)->withTasks(1)->create();
+        $project = ProjectFactory::withTasks(1)->create();
 
         $this->actingAs($project->owner)
             ->patch($project->tasks[0]->path(), [
@@ -95,7 +95,7 @@ class TriggerActivityTest extends TestCase
     /** @test */
     public function incompleting_a_task()
     {
-        $project = app(ProjectFactory::class)->withTasks(1)->create();
+        $project = ProjectFactory::withTasks(1)->create();
 
         $this->actingAs($project->owner)
             ->patch($project->tasks[0]->path(), [
@@ -120,7 +120,7 @@ class TriggerActivityTest extends TestCase
     /** @test */
     public function deleting_a_task()
     {
-        $project = app(ProjectFactory::class)->withTasks(1)->create();
+        $project = ProjectFactory::withTasks(1)->create();
 
         $project->tasks[0]->delete();
 

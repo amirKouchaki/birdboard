@@ -7,7 +7,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Tests\Setup\ProjectFactory;
+use Facades\Tests\Setup\ProjectFactory;
 use Tests\TestCase;
 
 
@@ -33,14 +33,14 @@ class ManageProjectTest extends TestCase
     /** @test */
     public function only_an_authenticated_user_can_delete_a_project(){
         $this->withoutExceptionHandling();
-        $project = app(ProjectFactory::class)->withTasks()->create();
+        $project = ProjectFactory::withTasks()->create();
         $this->actingAs($project->owner)->delete($project->path())->assertRedirect('/projects');
         $this->assertDatabaseMissing('projects',$project->getAttributes());
     }
 
     /** @test */
     public function only_an_authenticated_user_can_update_a_project(){
-        $project = app(ProjectFactory::class)->create();
+        $project = ProjectFactory::create();
         $this->actingAs($project->owner)->patch($project->path(),$attributes =[
             'title' => 'changed title',
             'description' => 'description changed',
@@ -54,7 +54,7 @@ class ManageProjectTest extends TestCase
 
     /** @test */
         public function only_an_authenticated_user_can_update_a_projects_general_notes_only(){
-            $project = app(ProjectFactory::class)->create();
+            $project = ProjectFactory::create();
             $this->actingAs($project->owner)
                 ->patch($project->path(),$attributes =['notes' => 'changed'])
                 ->assertRedirect($project->path());
@@ -79,7 +79,7 @@ class ManageProjectTest extends TestCase
     /** @test */
     public function a_user_can_view_a_single_one_of_their_projects()
     {
-        $project =app(ProjectFactory::class)->create();
+        $project =ProjectFactory::create();
         $this->actingAs($project->owner)->get($project->path())->assertSee([
             $project->title,
             $project->description
@@ -130,7 +130,7 @@ class ManageProjectTest extends TestCase
     /** @test */
     public function a_user_can_see_all_the_projects_they_have_been_invited_to(){
 
-        tap($project = app(ProjectFactory::class)->create())->invite($this->signIn());
+        tap($project = ProjectFactory::create())->invite($this->signIn());
 
         $this->get(route('projects.index'))->assertSee($project->title);
     }

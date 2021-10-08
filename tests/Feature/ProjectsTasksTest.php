@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\Project;
 use phpDocumentor\Reflection\DocBlock\Tags\Author;
-use Tests\Setup\ProjectFactory;
+use Facades\Tests\Setup\ProjectFactory;
 use Tests\TestCase;
 
 class ProjectsTasksTest extends TestCase
@@ -38,7 +38,7 @@ class ProjectsTasksTest extends TestCase
     {
 
         $this->signIn();
-        $project =app(ProjectFactory::class)->ownedBy(auth()->user())->create();
+        $project =ProjectFactory::ownedBy(auth()->user())->create();
         $this->post($project->path() . '/tasks',$attributes = [
             'body' => 'this is the projects test task'
         ])->assertRedirect($project->path());
@@ -50,7 +50,7 @@ class ProjectsTasksTest extends TestCase
     public function a_task_requires_a_body()
     {
         $this->signIn();
-        $project = app(ProjectFactory::class)->ownedBy(auth()->user())->create();
+        $project = ProjectFactory::ownedBy(auth()->user())->create();
         $task = Task::factory()->raw(['body' => '']);
         $this->post($project->path() . '/tasks', $task)->assertSessionHasErrors(['body']);
     }
@@ -58,7 +58,7 @@ class ProjectsTasksTest extends TestCase
     /** @test */
     public function a_task_can_be_updated()
     {
-        $project = app(ProjectFactory::class)->withTasks()->create();
+        $project = ProjectFactory::withTasks()->create();
         $this->actingAs($project->owner)->patch($project->tasks->first()->path(),$attributes = [
             'body' => 'this is the updated Task'
         ])->assertRedirect($project->path());
@@ -69,7 +69,7 @@ class ProjectsTasksTest extends TestCase
     /** @test */
     public function a_task_can_be_completed()
     {
-        $project = app(ProjectFactory::class)->withTasks()->create();
+        $project = ProjectFactory::withTasks()->create();
         $this->actingAs($project->owner)->patch($project->tasks->first()->path(),$attributes = [
             'body' => 'this is the updated Task',
             'completed' => true
@@ -81,7 +81,7 @@ class ProjectsTasksTest extends TestCase
     /** @test */
     public function a_task_can_be_marked_as_incomplete()
     {
-        $project = app(ProjectFactory::class)->withTasks()->create();
+        $project = ProjectFactory::withTasks()->create();
         $this->actingAs($project->owner)->patch($project->tasks->first()->path(),$attributes = [
             'body' => 'this is the updated Task',
             'completed' => false
@@ -94,8 +94,8 @@ class ProjectsTasksTest extends TestCase
     public function only_the_owner_can_update_the_task()
     {
 
-        $project =  app(ProjectFactory::class)->withTasks()->create();
-        $project_not_owned_by_you = app(ProjectFactory::class)->withTasks()->create();
+        $project =  ProjectFactory::withTasks()->create();
+        $project_not_owned_by_you = ProjectFactory::withTasks()->create();
 
         $this->actingAs($project->owner)->patch(route('tasks.update',[$project,$project_not_owned_by_you->tasks->first()]))->assertForbidden();
 
@@ -104,7 +104,7 @@ class ProjectsTasksTest extends TestCase
     /** @test */
     public function authenticated_user_cannot_update_tasks_that_they_dont_own_using_a_url_that_has_a_project_they_own(){
         $this->signIn();
-        $project = app(ProjectFactory::class)->ownedBy(auth()->user())->create();
+        $project = ProjectFactory::ownedBy(auth()->user())->create();
         $task = Task::factory()->create();
         $this->patch($project->path().'/tasks/'.$task->id)->assertForbidden();
     }

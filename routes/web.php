@@ -1,9 +1,9 @@
 <?php
 
+use App\Http\Controllers\ProjectInvitationController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectTasksController;
 use Illuminate\Support\Facades\Route;
-
 
 
 /*
@@ -21,18 +21,19 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::middleware('auth')->group(function (){
-    Route::resource('projects',ProjectController::class);
+Route::middleware('auth')->group(function () {
+    Route::resource('projects', ProjectController::class);
+    Route::post('/projects/{project}/invitations',[ProjectInvitationController::class,'store'])->name('invitation.store');
     Route::group([
         'prefix' => 'projects/{project}/tasks',
         'as' => 'tasks.'
-    ],function (){
-        Route::post('/',[ProjectTasksController::class,'store'])->name('store');
-        Route::patch('/{task}',[ProjectTasksController::class,'update'])->name('update');
+    ], function () {
+        Route::post('/', [ProjectTasksController::class, 'store'])->name('store');
+        Route::patch('/{task}', [ProjectTasksController::class, 'update'])->name('update');
     });
-    Route::view('/dashboard','dashboard')->name('dashboard');
+    Route::view('/dashboard', 'dashboard')->name('dashboard');
 });
 //remember the function scoped
 
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

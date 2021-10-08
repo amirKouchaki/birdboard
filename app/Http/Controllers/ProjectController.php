@@ -37,13 +37,13 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        Gate::authorize('is_associated_with_project',$project);
+        Gate::authorize('update',$project);
         $project = $project->load(['tasks','activity']);
         return view('projects.show',compact('project'));
     }
 
     public function update(Project $project){
-        Gate::authorize('is_associated_with_project',$project);
+        Gate::authorize('update',$project);
         $attributes = $this->validateRequest($project);
 
         $project->update($attributes);
@@ -51,7 +51,7 @@ class ProjectController extends Controller
         return redirect($project->path());
     }
     public function edit(Project $project){
-        Gate::authorize('is_associated_with_project',$project);
+        Gate::authorize('update',$project);
         return view('projects.edit',compact('project'));
     }
 
@@ -59,7 +59,7 @@ class ProjectController extends Controller
      * @throws \Throwable
      */
     public function destroy(Project $project){
-        Gate::authorize('is_associated_with_project',$project);
+        Gate::authorize('update',$project);
         $project->deleteOrFail();
         return redirect()->route('projects.index');
     }

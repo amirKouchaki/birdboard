@@ -8,17 +8,18 @@
             </div>
             <span class="flex ml-auto">
                 @foreach($project->members as $member)
-                    <img class="rounded-full w-10 mr-4" src="{{pravatar_url($member->id)}}" alt="{{$member->name}}'s profile picture">
+                    <img class="rounded-full w-10 mr-4" src="{{pravatar_url($member->id)}}"
+                         alt="{{$member->name}}'s profile picture">
                 @endforeach
-                <img class="rounded-full w-10 mr-4" src="{{pravatar_url($project->owner_id)}}" alt="owner's profile picture">
+                <img class="rounded-full w-10 mr-4" src="{{pravatar_url($project->owner_id)}}"
+                     alt="owner's profile picture">
                 <a href="{{$project->path().'/edit'}}" class=" py-2 px-4 bg-blue-400 rounded-full text-white ml-4">edit your project</a>
             </span>
 
         </div>
     </x-slot>
-
     <div class="lg:flex">
-        <div class="lg:w-3/4 mr-3">
+        <div class="lg:w-4/6 mr-3">
             <div class="mb-8">
                 <h2 class="text-xl text-gray-600 mb-2">Tasks</h2>
                 @forelse($project->tasks as $task)
@@ -55,17 +56,13 @@
                     <textarea name="notes" id="" rows="10" class="w-full px-4 py-2 rounded"
                               placeholder="Anything special you want to make a note of?"
                     >{{$project->notes}}</textarea>
-                    <button  type="submit" class="button mt-3">save notes</button>
+                    <button type="submit" class="button mt-3">save notes</button>
                 </form>
-                @forelse($errors->all() as $error)
-                    <div class="my-3 text-xs text-red-500">{{$error}}</div>
-                @empty
-                @endforelse
+                <x-auth-validation-errors/>
             </div>
         </div>
-        <div class="lg:w-1/4 ml-3">
-
-            <x-card class="mb-5">
+        <aside class="lg:w-2/6 ml-3">
+            <x-card class="mb-5 ">
                 <div class=" text-md ">
                     <h3 class="border-l-4 border-blue-400 text-xl mb-6 h-14 font-bold -ml-6 pl-5 text-blue-500">
                         {{$project->title}}
@@ -75,17 +72,19 @@
             </x-card>
             <x-card>
                 <ul>
-                @forelse($project->activity as $activity)
-                    <li class="list-none text-sm font-bold {{!$loop->last ?'mb-1':''}}">
-                        @include('projects.activity.'.$activity->description)
-                        <span class="text-gray-400">{{$activity->created_at->diffForHumans(null,true)}}</span>
-                    </li>
-                @empty
-                    <li class="list-none">there are no activities yet!</li>
-                @endforelse
+                    @forelse($project->activity as $activity)
+                        <li class="list-none text-sm font-bold {{!$loop->last ?'mb-1':''}}">
+                            @include('projects.activity.'.$activity->description)
+                            <span class="text-gray-400">{{$activity->created_at->diffForHumans(null,true)}}</span>
+                        </li>
+                    @empty
+                        <li class="list-none">there are no activities yet!</li>
+                    @endforelse
                 </ul>
             </x-card>
-        </div>
+            @can('manage',$project)
+                @include('partials.projects.invitations._form')
+            @endcan
+        </aside>
     </div>
-
 </x-app-layout>

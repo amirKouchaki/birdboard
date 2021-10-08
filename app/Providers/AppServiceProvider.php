@@ -31,11 +31,15 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Gate::define(
-            'is_associated_with_project',
+            'update',
             fn(User $user,Project $project)
                 =>$user->is($project->owner) ||$project->members->contains($user)
         );
-
+        Gate::define(
+            'manage',
+            fn(User $user,Project $project)
+            =>$user->is($project->owner)
+        );
 
         Model::unguard(true);
 //        Project::observe(ProjectObserver::class);

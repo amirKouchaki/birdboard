@@ -11,7 +11,7 @@ class ProjectTasksController extends Controller
 
     public function store(Project $project){
 
-        Gate::authorize('is_associated_with_project',$project);
+        Gate::authorize('update',$project);
 
         $attributes = \request()->validate([
             'body' => 'required'
@@ -23,7 +23,7 @@ class ProjectTasksController extends Controller
 
 
     public function update(Project $project,Task $task){
-        Gate::authorize('is_associated_with_project',$task->project);
+        Gate::authorize('update',$task->project);
 
         $task->update(\request()->validate(['body' => 'required']));
         //TODO calling a method on string
